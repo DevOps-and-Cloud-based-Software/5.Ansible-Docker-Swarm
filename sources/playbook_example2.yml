@@ -1,7 +1,7 @@
 ---
-- hosts: all
+- name: Example2
+  hosts: all
   become: true
-  name: Example2
   tasks:
 
     - name: Update Debian
@@ -15,9 +15,9 @@
       when: ansible_os_family == 'RedHat'
 
 
-- hosts: web-server1
+- name: Example2-1
+  hosts: web-server1
   become: true
-  name: Example2-1
   tasks:
     - name: Install apache2
       ansible.builtin.package:
@@ -29,9 +29,9 @@
         name: apache2
         state: started
 
-- hosts: web-server2
+- name: Example2-2
+  hosts: web-server2
   become: true
-  name: Example2-2
   tasks:
     - name: Install nginx
       ansible.builtin.package:

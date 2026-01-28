@@ -70,12 +70,12 @@ chmod 600 /home/ubuntu/lab_user.pem
 
 # 2.Tutorial  
 
-Make sure Ansible is working in your control node by executing the following command:
+Make sure Ansible is working in your control node by executing the following ansible.legacy.command:
 ```
 ansible all --inventory "localhost," --module-name debug --args "msg='Hello'"
 ```
 
-Here is a break-down  of Ansible the command: 
+Here is a break-down  of Ansible the ansible.legacy.command: 
 * **all**: this means do run the module on all machines that are listed in the "inventory" file, which is the next part of the command
 * **--inventory "localhost,"**: The inventory is where all details of the managed nodes are listed such as IP addresses, usernames, etc. In this case, we only use our local computer. This may also be a file 
 * **--module-name debug**: Specify which module to use. In this case the “debug” module, prints statements during execution and can be useful for debugging variables 

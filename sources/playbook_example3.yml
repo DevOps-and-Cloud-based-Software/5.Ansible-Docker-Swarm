@@ -1,9 +1,9 @@
 ---
-- hosts: web-server1
-  name: Example3
+- name: Example3
+  hosts: web-server1
   tasks:
     - name: Stop secret
-      ansible.builtin.shell: set -o pipefail && date +%s | sha256sum | base64 | head -c 32 ; echo
+      ansible.legacy.command: set -o pipefail && date +%s | sha256sum | base64 | head -c 32 ; echo
       args:
         executable: /bin/bash
       register: command_output
@@ -13,8 +13,8 @@
       ansible.builtin.debug:
         msg: "Secret password is {{ command_output.stdout }}"
 
-- hosts: web-server2
-  name: Example3-2
+- name: Example3-2
+  hosts: web-server2
   tasks:
     - name: Print password
       ansible.builtin.debug:
