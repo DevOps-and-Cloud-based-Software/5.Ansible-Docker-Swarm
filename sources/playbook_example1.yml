@@ -1,5 +1,5 @@
-- hosts: all
-  name: Example1
+- name: Example1
+  hosts: all
   become: true
   tasks:
     - name: Update Debian
@@ -8,7 +8,7 @@
       when: ansible_os_family == 'Debian'
 
     - name: Update RedHat
-      ansible.builtin.yum:
+      ansible.builtin.dnf:
         update_cache: true
       when: ansible_os_family == 'RedHat'
 

@@ -9,7 +9,7 @@
       when: ansible_os_family == 'Debian'
 
     - name: Update RedHat
-      ansible.builtin.yum:
+      ansible.builtin.dnf:
         update_cache: yes
       when: ansible_os_family == 'RedHat'
 
@@ -47,7 +47,7 @@
       when: ansible_os_family == 'Debian'
 
     - name: Update RedHat
-      ansible.builtin.yum:
+      ansible.builtin.dnf:
         update_cache: yes
       when: ansible_os_family == 'RedHat'
 
@@ -68,7 +68,7 @@
       when: ansible_os_family == 'Debian'
 
     - name: Update RedHat
-      ansible.builtin.yum:
+      ansible.builtin.dnf:
         update_cache: yes
       when: ansible_os_family == 'RedHat'
 
