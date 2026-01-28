@@ -347,7 +347,7 @@ More information about variables and 'hostvars' can be found here:  https://docs
 
 
 
-## Exercises
+# 3. Tasks and Questions
 
 Create a playbook that will install and configure a Docker swarm cluster
 
