@@ -2,16 +2,16 @@
 ## Lab 1-4: Software deployment and runtime adaptation (Ansible and Docker Swarm)
 University of Amsterdam
 
-# Objectives
+# 1. Introduction
 
 You will learn how to use Ansible to deploy and configure software on multiple remote hosts, and how to adapt an
 application in a Docker Swarm cluster at runtime.
 In this assignment, you will create several playbooks and use Ansible to set up and configure a Docker swarm cluster on
 top of a set of VMs. You will also use the deployed Docker swarm cluster to practice the service scaling.
 
-# Background
+## Background
 
-## Ansible
+### Ansible
 
 Ansible is an open-source, command-line automation software that is typically used to configure systems, deploy software, and orchestrate advanced 
 workflows to support application deployment and system updates. 
@@ -29,12 +29,12 @@ Ansible uses the following terms:
 
 You can find a short technical explanation here [https://www.youtube.com/watch?v=fHO1X93e4WA](https://www.youtube.com/watch?v=fHO1X93e4WA)
 
-## Docker Swarm
+### Docker Swarm
 Docker is a tool used to automate the deployment of an application as a lightweight container so that the application can run in different environments.
 Swarm Mode is Docker’s built-in orchestration system for scaling containers across a cluster. 
 
 
-# Prepare your Development Environment 
+## Prepare your Development Environment 
 
 ## Install Ansible 
 
@@ -68,7 +68,7 @@ Make sure that the permissions are set to "Read Only". To do that type
 chmod 600 /home/ubuntu/lab_user.pem
 ```
 
-# Introduction to Ansible 
+# 2.Tutorial  
 
 Make sure Ansible is working in your control node by executing the following command:
 ```
@@ -245,7 +245,7 @@ ansible-playbook -i aws_hosts2 playbook_example2-1.yml
 ```
 
 
-#### Pass Variables Between Plays 
+### Pass Variables Between Plays 
 Sometimes it is necessary to pass variables between plays. Consider the following 
 playbook:
 [playbook_example3.yml](sources/playbook_example3.yml)
