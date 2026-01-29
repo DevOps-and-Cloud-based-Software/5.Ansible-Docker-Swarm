@@ -1,6 +1,7 @@
-# DevOps and Cloud Based Software  
-## Lab 1-4: Software deployment and runtime adaptation (Ansible and Docker Swarm)
-University of Amsterdam
+Software deployment and runtime adaptation (Ansible and Docker Swarm)
+==============
+
+***University of Amsterdam***
 
 # 1. Introduction
 
