@@ -62,6 +62,7 @@ Install Ansible:
     sudo apt update 
     sudo apt install ansible
     ```
+  
 * Check the installation:
     ```bash
     ansible --version
