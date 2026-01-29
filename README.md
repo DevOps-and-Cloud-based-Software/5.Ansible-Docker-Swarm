@@ -10,9 +10,7 @@ application in a Docker Swarm cluster at runtime.
 In this assignment, you will create several playbooks and use Ansible to set up and configure a Docker swarm cluster on
 top of a set of VMs. You will also use the deployed Docker swarm cluster to practice the service scaling.
 
-## Background
-
-### Ansible
+## Ansible
 
 Ansible is an open-source, command-line automation software that is typically used to configure systems, deploy software, and orchestrate advanced 
 workflows to support application deployment and system updates. 
@@ -30,14 +28,13 @@ Ansible uses the following terms:
 
 You can find a short technical explanation here [https://www.youtube.com/watch?v=fHO1X93e4WA](https://www.youtube.com/watch?v=fHO1X93e4WA)
 
-### Docker Swarm
+## Docker Swarm
 Docker is a tool used to automate the deployment of an application as a lightweight container so that the application can run in different environments.
 Swarm Mode is Docker’s built-in orchestration system for scaling containers across a cluster. 
 
 
-## Prepare your Development Environment 
+# 2. Tutorial 
 
-## Install Ansible 
 
 First, you will need to generate a new key pair. 
 If are using awsacademy go to `Modules`->`AWS Academy Learner Lab`->
@@ -46,7 +43,6 @@ If are using awsacademy go to `Modules`->`AWS Academy Learner Lab`->
 If you are using any other VM you can create a new key pair by following these instructions:
 https://www.ssh.com/academy/ssh/keygen
 
-Start a control node t2.micro Ubuntu Linux. Log in the newly created VM run:
 
 ---
 
@@ -59,35 +55,33 @@ Start a control node t2.micro Ubuntu Linux. Log in the newly created VM run:
 
 ---
 
-```bash
-sudo apt update 
-sudo apt install ansible
-```
 
-Check the installation: 
+Install Ansible:
+* Start a control node t2.micro Ubuntu Linux. Log in the newly created VM run:
+    ```bash
+    sudo apt update 
+    sudo apt install ansible
+    ```
+* Check the installation:
+    ```bash
+    ansible --version
+    ```
+* Copy the ssh private key from the sandbox to the newly created VM and save it at /home/ubuntu/lab_user.pem
+* Make sure that the permissions are set to "Read Only". To do that type 
+    ```
+    chmod 600 /home/ubuntu/lab_user.pem
+    ```
 
-```bash
-ansible --version
-```
+* Make sure Ansible is working in your control node by executing the following ansible.legacy.command:
+    ```
+    ansible all --inventory "localhost," --module-name debug --args "msg='Hello'"
+    ```
 
-Copy the ssh private key from the sandbox to the newly created VM and save it at /home/ubuntu/lab_user.pem
-Make sure that the permissions are set to "Read Only". To do that type 
-```
-chmod 600 /home/ubuntu/lab_user.pem
-```
-
-# 2.Tutorial  
-
-Make sure Ansible is working in your control node by executing the following ansible.legacy.command:
-```
-ansible all --inventory "localhost," --module-name debug --args "msg='Hello'"
-```
-
-Here is a break-down  of Ansible the ansible.legacy.command: 
-* **all**: this means do run the module on all machines that are listed in the "inventory" file, which is the next part of the command
-* **--inventory "localhost,"**: The inventory is where all details of the managed nodes are listed such as IP addresses, usernames, etc. In this case, we only use our local computer. This may also be a file 
-* **--module-name debug**: Specify which module to use. In this case the “debug” module, prints statements during execution and can be useful for debugging variables 
-* **--args "msg='Hello'"**: Part of the debug module. In this case ‘Hello’ is the customized massage that is printed. If omitted, prints a generic message.
+* Here is a break-down  of Ansible the ansible.legacy.command: 
+  * **all**: this means do run the module on all machines that are listed in the "inventory" file, which is the next part of the command
+  * **--inventory "localhost,"**: The inventory is where all details of the managed nodes are listed such as IP addresses, usernames, etc. In this case, we only use our local computer. This may also be a file 
+  * **--module-name debug**: Specify which module to use. In this case the “debug” module, prints statements during execution and can be useful for debugging variables 
+  * **--args "msg='Hello'"**: Part of the debug module. In this case ‘Hello’ is the customized massage that is printed. If omitted, prints a generic message.
 
 
 ## Controlling Hosts
@@ -101,10 +95,9 @@ Start 2 t2.micro Ubuntu Linux VMs and **allow all inbound traffic** in the secur
  
 ---
 
-Create an inventory file named 'aws_hosts1' that looks like this:
-[aws_hosts1](sources/aws_hosts1)
-
-Change the hostnames with the names of your VMs. 
+* Create an inventory file named 'aws_hosts1' that looks like this:
+    [aws_hosts1](sources/aws_hosts1)
+* Change the hostnames with the names of your VMs. 
 
 ---
 
@@ -123,14 +116,14 @@ To assign variables to hosts, you can use the [aws:vars] group variables. In thi
 location of the key. For more information on inventories, see here: 
 https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
 
-Next, run:
-```
-ansible aws --inventory aws_hosts1 -m setup
-```
+* Next, run:
+    ```
+    ansible aws --inventory aws_hosts1 -m setup
+    ```
 
 The setup module will gather information about the target machines. 
 
-The output should look like this:
+* The output should look like this:
 
 ```json
     ec2-18-204-5-138.compute-1.amazonaws.com | SUCCESS => {
@@ -183,7 +176,7 @@ maps a set of instructions defined against a particular managed node.
 
 ### Create a Playbook
 
-Create a playbook that will install in both VMs Python:
+* Create a playbook that will install in both VMs Python:
 [playbook_example1.yml](sources/playbook_example1.yml)
 
 
@@ -192,7 +185,7 @@ Execute the playbook:
 ansible-playbook -i aws_hosts1 playbook_example1.yml
 ```
 
-The output should look like this:
+* The output should look like this:
 ```bash
 PLAY [all] ***************************************************************************************************************************
 
@@ -209,16 +202,15 @@ ec2-54-90-167-82.compute-1.amazonaws.com : ok=2    changed=0    unreachable=0   
 ec2-54-91-92-164.compute-1.amazonaws.com : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 ```
 
-In this output you can see:
+* In this output you can see:
+  * PLAY [all]: The group of host the play will run.
+  * TASK [Gathering Facts]: The Gather Facts task runs implicitly. By default, Ansible gathers information about your inventory that it can use in the playbook.
+  * TASK [ansible.builtin.package]: The name the of module to run the task.
+  * ok: [ec2-54-90-167-82.compute-1.amazonaws.com], ok: [ec2-54-91-92-164.compute-1.amazonaws.com]The status of each task. Each task has a status of ok which means it ran successfully.
+  * PLAY RECAP : The play recap that summarizes results of all tasks in the playbook per managed node. In this example, there are two tasks so ok=2 indicates that each task ran successfully.
 
-* PLAY [all]: The group of host the play will run.
-* TASK [Gathering Facts]: The Gather Facts task runs implicitly. By default, Ansible gathers information about your inventory that it can use in the playbook.
-* TASK [ansible.builtin.package]: The name the of module to run the task.
-* ok: [ec2-54-90-167-82.compute-1.amazonaws.com], ok: [ec2-54-91-92-164.compute-1.amazonaws.com]The status of each task. Each task has a status of ok which means it ran successfully.
-* PLAY RECAP : The play recap that summarizes results of all tasks in the playbook per managed node. In this example, there are two tasks so ok=2 indicates that each task ran successfully.
 
-
-### Execute plays on different hosts
+## Execute plays on different hosts
 
 If we want to execute different plays on different hosts, if for example, we need to install Apache server on one host 
 and Nginx server on another we need to specify that in the playbook by setting the - hosts: web-server1 
@@ -237,23 +229,19 @@ If we change the inventory and execute:
 ansible-playbook -i aws_hosts2 playbook_example2.yml
 ```
 
-If we open a browser to **[web-server1]** and **[web-server2]** that we set in the inventory files we should see Apache 
-and Nginx running.
-
-If you cannot connect, verify that you are using HTTP, and check the VMs' inbound rules in its Security Groups. 
-
-
-Make sure to stop the servers:
-Get the playbook to stop the servers:
-[playbook_example2-1.yml](sources/playbook_example2-1.yml)
-
-and run: 
-```bash
-ansible-playbook -i aws_hosts2 playbook_example2-1.yml
-```
+* If we open a browser to **[web-server1]** and **[web-server2]** that we set in the inventory files we should see Apache 
+and Nginx running. 
+* If you cannot connect, verify that you are using HTTP, and check the VMs' inbound rules in its Security Groups. 
+* Make sure to stop the servers:
+  * Get the playbook to stop the servers:
+  [playbook_example2-1.yml](sources/playbook_example2-1.yml)
+* and run: 
+    ```bash
+    ansible-playbook -i aws_hosts2 playbook_example2-1.yml
+    ```
 
 
-### Pass Variables Between Plays 
+## Pass Variables Between Plays 
 Sometimes it is necessary to pass variables between plays. Consider the following 
 playbook:
 [playbook_example3.yml](sources/playbook_example3.yml)
@@ -353,9 +341,7 @@ module 'add_host' which adds a host during the play execution. More infomrtaion 
 
 More information about variables and 'hostvars' can be found here:  https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#accessing-information-about-other-hosts-with-magic-variables.
 
-
-
-# 3. Tasks and Questions
+## Exercise 1 
 
 Create a playbook that will install and configure a Docker swarm cluster
 
@@ -375,7 +361,8 @@ When you have your playbooks, ready execute the Docker swarm setup playbook.  No
 initializing the cluster on the master node  or joining the cluster on the workers you may need to open all traffic 
 between the VMs of the cluster.
 
-### Docker swarm scale benchmark 
+
+## Exercise 2
 
 If your playbook is installed successfully you should be able to see the docker swarm visualizer at http://MATER-IP:5000/
 
@@ -387,19 +374,16 @@ Fill in the tasks in the playbook provided:
  * Look in the end of the file and add your plays/tasks to repeat the process for 2, 4, and 8 instances 
  * Record the results for the Avg 'Req/Sec'
  * Create a histogram graph where in the x-axis you will have the number of instances i.e. 1,2,4,8 and in the y-axis the 'Req/Sec' for each run. 
- * Comment on the results do you get increased performance as you add more instances? If not explain why and how would you achieve more requests per second. 
+ * Comment on the results do you get increased performance as you add more instances? If not explain why and how would you achieve more requests per second.
 
+# 3. Questions
 
-## Questions
-
-### Ansible Play Failure 
+## Ansible Play Failure 
 If we execute:
 ```
 ansible-playbook -i aws_hosts1 playbook_example2.yml
 ```
-
 We get this output:
-
 ```commandline
 [WARNING]: Could not match supplied host pattern, ignoring: web-server1
 
@@ -416,11 +400,11 @@ PLAY RECAP *********************************************************************
 Explain in a few lines why this play failed. 
 
 
-### Ansible Play Development 
+## Ansible Play Development 
 In [playbook_example2](sources/playbook_example2.yml) if we want to run only the 'start nginx' play how would achieve that?
 Provide the ansible-playbook command to do that. 
 
 
-### Ansible in DevOps
+## Ansible in DevOps
 Discuss how Ansible can be used during the DevOps lifecycle, e.g., which stages? What are the advantages and alternatives of Ansible?
 
