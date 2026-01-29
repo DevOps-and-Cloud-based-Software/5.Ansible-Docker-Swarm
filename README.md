@@ -10,7 +10,7 @@ application in a Docker Swarm cluster at runtime.
 In this assignment, you will create several playbooks and use Ansible to set up and configure a Docker swarm cluster on
 top of a set of VMs. You will also use the deployed Docker swarm cluster to practice the service scaling.
 
-## Ansible
+## 1.1 Ansible
 
 Ansible is an open-source, command-line automation software that is typically used to configure systems, deploy software, and orchestrate advanced 
 workflows to support application deployment and system updates. 
@@ -28,12 +28,19 @@ Ansible uses the following terms:
 
 You can find a short technical explanation here [https://www.youtube.com/watch?v=fHO1X93e4WA](https://www.youtube.com/watch?v=fHO1X93e4WA)
 
-## Docker Swarm
+## 1.2 Docker Swarm
 Docker is a tool used to automate the deployment of an application as a lightweight container so that the application can run in different environments.
 Swarm Mode is Docker’s built-in orchestration system for scaling containers across a cluster. 
 
 
 # 2. Tutorial 
+
+The steps of this tutorial are the following:
+1. [Set up Ansible control node](#21-install-ansible)
+2. [Control Hosts](#22-control-hosts)
+3. [Create a Playbook](#23-create-a-playbook)
+4. [Execute plays on different hosts](#24-execute-plays-on-different-hosts)
+5. [Pass Variables Between Plays](#25-pass-variables-between-plays)
 
 
 First, you will need to generate a new key pair. 
@@ -56,7 +63,7 @@ https://www.ssh.com/academy/ssh/keygen
 ---
 
 
-Install Ansible:
+## 2.1 Install Ansible 
 * Start a control node t2.micro Ubuntu Linux. Log in the newly created VM run:
     ```bash
     sudo apt update 
@@ -84,7 +91,7 @@ Install Ansible:
   * **--args "msg='Hello'"**: Part of the debug module. In this case ‘Hello’ is the customized massage that is printed. If omitted, prints a generic message.
 
 
-## Controlling Hosts
+## 2.2 Control Hosts
 Start 2 t2.micro Ubuntu Linux VMs and **allow all inbound traffic** in the security groups.
 
 ---
@@ -164,17 +171,12 @@ The setup module will gather information about the target machines.
 
 The setup module gathers facts about the managed nodes and prints it the terminal. 
 
-## Using Playbooks
-
+## 2.3 Create a Playbook
 Ansible Playbooks are like a to-do list for Ansible that contains a list of tasks. They are written in YAML format and 
 run sequentially. 
 
-## Playbook Structure
 Each playbook is an aggregation of one or more plays, and there can be more than one play inside the playbook. A play 
 maps a set of instructions defined against a particular managed node.
-
-
-### Create a Playbook
 
 * Create a playbook that will install in both VMs Python:
 [playbook_example1.yml](sources/playbook_example1.yml)
@@ -210,7 +212,7 @@ ec2-54-91-92-164.compute-1.amazonaws.com : ok=2    changed=0    unreachable=0   
   * PLAY RECAP : The play recap that summarizes results of all tasks in the playbook per managed node. In this example, there are two tasks so ok=2 indicates that each task ran successfully.
 
 
-## Execute plays on different hosts
+## 2.4 Execute plays on different hosts
 
 If we want to execute different plays on different hosts, if for example, we need to install Apache server on one host 
 and Nginx server on another we need to specify that in the playbook by setting the - hosts: web-server1 
@@ -241,7 +243,7 @@ and Nginx running.
     ```
 
 
-## Pass Variables Between Plays 
+## 2.5 Pass Variables Between Plays 
 Sometimes it is necessary to pass variables between plays. Consider the following 
 playbook:
 [playbook_example3.yml](sources/playbook_example3.yml)
@@ -341,7 +343,9 @@ module 'add_host' which adds a host during the play execution. More infomrtaion 
 
 More information about variables and 'hostvars' can be found here:  https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#accessing-information-about-other-hosts-with-magic-variables.
 
-## Exercise 1 
+# 3. Exercises
+
+## 3.1 Install and Configure Docker Swarm Cluster
 
 Create a playbook that will install and configure a Docker swarm cluster
 
@@ -362,23 +366,7 @@ initializing the cluster on the master node  or joining the cluster on the worke
 between the VMs of the cluster.
 
 
-## Exercise 2
-
-If your playbook is installed successfully you should be able to see the docker swarm visualizer at http://MATER-IP:5000/
-
-Now we can benchmark Nginx. To do that, run the [benchmark-cluster.yml](sources/benchmark-cluster.yml) :
-```
-ansible-playbook -i ansible_cluster_hosts benchmark-cluster.yml
-```
-Fill in the tasks in the playbook provided:
- * Look in the end of the file and add your plays/tasks to repeat the process for 2, 4, and 8 instances 
- * Record the results for the Avg 'Req/Sec'
- * Create a histogram graph where in the x-axis you will have the number of instances i.e. 1,2,4,8 and in the y-axis the 'Req/Sec' for each run. 
- * Comment on the results do you get increased performance as you add more instances? If not explain why and how would you achieve more requests per second.
-
-# 3. Questions
-
-## Ansible Play Failure 
+## 3.1 Ansible Play Failure 
 If we execute:
 ```
 ansible-playbook -i aws_hosts1 playbook_example2.yml
@@ -400,11 +388,28 @@ PLAY RECAP *********************************************************************
 Explain in a few lines why this play failed. 
 
 
-## Ansible Play Development 
+## 3.2 Benchmark Nginx 
+
+If your playbook is installed successfully you should be able to see the docker swarm visualizer at http://MATER-IP:5000/
+
+Now we can benchmark Nginx. To do that, run the [benchmark-cluster.yml](sources/benchmark-cluster.yml) :
+```
+ansible-playbook -i ansible_cluster_hosts benchmark-cluster.yml
+```
+Fill in the tasks in the playbook provided:
+ * Look in the end of the file and add your plays/tasks to repeat the process for 2, 4, and 8 instances 
+ * Record the results for the Avg 'Req/Sec'
+ * Create a histogram graph where in the x-axis you will have the number of instances i.e. 1,2,4,8 and in the y-axis the 'Req/Sec' for each run. 
+ * Comment on the results do you get increased performance as you add more instances? If not explain why and how would you achieve more requests per second.
+
+
+
+
+## 3.2 Ansible Play Development 
 In [playbook_example2](sources/playbook_example2.yml) if we want to run only the 'start nginx' play how would achieve that?
 Provide the ansible-playbook command to do that. 
 
 
-## Ansible in DevOps
-Discuss how Ansible can be used during the DevOps lifecycle, e.g., which stages? What are the advantages and alternatives of Ansible?
+## 3.3 Questions 
+1. Discuss how Ansible can be used during the DevOps lifecycle, e.g., which stages? What are the advantages and alternatives of Ansible?
 
