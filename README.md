@@ -38,6 +38,13 @@ Swarm Mode is Docker’s built-in orchestration system for scaling containers ac
 
 ## Install Ansible 
 
+First, you will need to generate a new key pair. 
+If are using awsacademy go to `Modules`->`AWS Academy Learner Lab`->
+`Launch AWS Academy Learner Lab`. In the left part you will see a link to `SSH access to an EC2 Instance you launch` where you can find instructions to create a new key pair.
+
+If you are using any other VM you can create a new key pair by following these instructions:
+https://www.ssh.com/academy/ssh/keygen
+
 Start a control node t2.micro Ubuntu Linux. Log in the newly created VM run:
 
 ---
