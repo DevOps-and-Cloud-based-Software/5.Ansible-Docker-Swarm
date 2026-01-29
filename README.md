@@ -69,6 +69,7 @@ https://www.ssh.com/academy/ssh/keygen
     sudo apt update 
     sudo apt install ansible
     ```
+  
 * Check the installation:
     ```bash
     ansible --version

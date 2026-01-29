@@ -2,12 +2,11 @@
 - name: Example3
   hosts: web-server1
   tasks:
-    - name: Stop secret
-      ansible.legacy.command: set -o pipefail && date +%s | sha256sum | base64 | head -c 32 ; echo
-      args:
-        executable: /bin/bash
+    - name: Generate secret password
+      ansible.builtin.command: "openssl rand -base64 12"
       register: command_output
-      changed_when: false
+      changed_when: command_output.rc == 0
+
 
     - name: Print command output
       ansible.builtin.debug:
