@@ -5,28 +5,26 @@ Software deployment and runtime adaptation (Ansible and Docker Swarm)
 
 # 1. Introduction
 
-You will learn how to use Ansible to deploy and configure software on multiple remote hosts, and how to adapt an
-application in a Docker Swarm cluster at runtime.
+You will learn how to use Ansible to deploy and configure software on multiple remote hosts, and how to adapt an application at runtime in a Docker Swarm cluster.
 In this assignment, you will create several playbooks and use Ansible to set up and configure a Docker swarm cluster on
 top of a set of VMs. You will also use the deployed Docker swarm cluster to practice the service scaling.
 
 ## 1.1 Ansible
 
-Ansible is an open-source, command-line automation software that is typically used to configure systems, deploy software, and orchestrate advanced 
-workflows to support application deployment and system updates. 
+Ansible is an open-source command-line automation tool that is typically used to configure systems, deploy software, and orchestrate advanced workflows for application deployment and system updates.
 Ansible uses the following terms:
 
- * **Control node**: the machine where Ansible is installed. It manages the execution of the Playbook. It can be any machine on the internet
- * **Managed node**:     A remote system, or host, that Ansible controls
- * **Inventory**: provides a complete list of all the target machines on which various modules are run by making an ssh connection and install the necessary software’s
- * **Playbook**: consists of steps that the control machine will perform on the managed nodes defined in the inventory file
+ * **Control node**: the machine where Ansible is installed.It manages the execution of the playbook. It can be any machine on the internet.
+ * **Managed node**:     A remote system or host that Ansible controls.
+ * **Inventory**: provides a complete list of all the target machines on which various modules are run by making an SSH connection and installing the necessary software.
+ * **Playbook**: Consists of steps that the control node performs on the managed nodes defined in the inventory file.
  * **Task**: a block that defines a single procedure to be executed, e.g., install a package
  * **Module**: the main building blocks of Ansible and are reusable scripts that are used by Ansible playbooks. Ansible comes with many reusable modules. These include functionality for controlling services, software package installation, working with files and directories, etc.
- * **Role**: a way for organizing playbooks and other files to facilitate sharing and reusing portions of a provisioning
+ * **Role**: a way for organizing playbooks and other files to facilitate sharing and reusing portions of a provisioning configuration.
  * **Facts**: global variables containing information about the system, like network interfaces or operating system
  * **Handlers**: used to trigger service status changes, like restarting or stopping a service.
 
-You can find a short technical explanation here [https://www.youtube.com/watch?v=fHO1X93e4WA](https://www.youtube.com/watch?v=fHO1X93e4WA)
+You can find a short technical explanation here: [https://www.youtube.com/watch?v=fHO1X93e4WA](https://www.youtube.com/watch?v=fHO1X93e4WA)
 
 ## 1.2 Docker Swarm
 Docker is a tool used to automate the deployment of an application as a lightweight container so that the application can run in different environments.
@@ -35,7 +33,7 @@ Swarm Mode is Docker’s built-in orchestration system for scaling containers ac
 
 # 2. Tutorial 
 
-The steps of this tutorial are the following:
+The steps of this tutorial are as follows:
 1. [Set up Ansible control node](#21-install-ansible)
 2. [Control Hosts](#22-control-hosts)
 3. [Create a Playbook](#23-create-a-playbook)
@@ -44,7 +42,7 @@ The steps of this tutorial are the following:
 
 
 First, you will need to generate a new key pair. 
-If are using awsacademy go to `Modules`->`AWS Academy Learner Lab`->
+If you are using AWS Academy, go to `Modules`->`AWS Academy Learner Lab`->
 `Launch AWS Academy Learner Lab`. In the left part you will see a link to `SSH access to an EC2 Instance you launch` where you can find instructions to create a new key pair.
 
 If you are using any other VM you can create a new key pair by following these instructions:
@@ -55,7 +53,7 @@ https://www.ssh.com/academy/ssh/keygen
 
  **IMPORTANT**
 
- The default username for Ubuntu instances is 'ubuntu'. So the ssh command should look like this 
+ The default username for Ubuntu instances is 'ubuntu'. So the SSH command should look like this:
  ```bash
  ssh ubuntu@ec2-XX-XXX-XXX-XX.compute-1.amazonaws.com -i PRIVATE_KEY.pem 
   ```
@@ -64,7 +62,7 @@ https://www.ssh.com/academy/ssh/keygen
 
 
 ## 2.1 Install Ansible 
-* Start a control node t2.micro Ubuntu Linux. Log in the newly created VM run:
+* Start a control node t2.micro Ubuntu Linux. Log in to the newly created VM and run:
     ```bash
     sudo apt update 
     sudo apt install ansible
@@ -170,7 +168,7 @@ The setup module will gather information about the target machines.
  ...
 ```
 
-The setup module gathers facts about the managed nodes and prints it the terminal. 
+The setup module gathers facts about the managed nodes and prints it to the terminal. 
 
 ## 2.3 Create a Playbook
 Ansible Playbooks are like a to-do list for Ansible that contains a list of tasks. They are written in YAML format and 
@@ -206,7 +204,7 @@ ec2-54-91-92-164.compute-1.amazonaws.com : ok=2    changed=0    unreachable=0   
 ```
 
 * In this output you can see:
-  * PLAY [all]: The group of host the play will run.
+  * PLAY [all]: The group of hosts the play will run on.
   * TASK [Gathering Facts]: The Gather Facts task runs implicitly. By default, Ansible gathers information about your inventory that it can use in the playbook.
   * TASK [ansible.builtin.package]: The name the of module to run the task.
   * ok: [ec2-54-90-167-82.compute-1.amazonaws.com], ok: [ec2-54-91-92-164.compute-1.amazonaws.com]The status of each task. Each task has a status of ok which means it ran successfully.
@@ -215,8 +213,8 @@ ec2-54-91-92-164.compute-1.amazonaws.com : ok=2    changed=0    unreachable=0   
 
 ## 2.4 Execute plays on different hosts
 
-If we want to execute different plays on different hosts, if for example, we need to install Apache server on one host 
-and Nginx server on another we need to specify that in the playbook by setting the - hosts: web-server1 
+If we want to execute different plays on different hosts. For example, we need to install Apache server on one host
+and Nginx server on another we need to specify that in the playbook by setting the - hosts: web-server1.
 
 Create the following inventory in the control node :
 [aws_hosts2](sources/aws_hosts2)
@@ -340,7 +338,7 @@ ec2-54-91-92-164.compute-1.amazonaws.com : ok=2    changed=0    unreachable=0   
 ```
 
 we’ll see that the variable is now available to the 'web-server2' hosts as well. This is archived with the use of the 
-module 'add_host' which adds a host during the play execution. More infomrtaion about the module can be found here: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/add_host_module.html
+module 'add_host' which adds a host during the play execution. More information about the module can be found here: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/add_host_module.html
 
 More information about variables and 'hostvars' can be found here:  https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#accessing-information-about-other-hosts-with-magic-variables.
 
@@ -348,7 +346,7 @@ More information about variables and 'hostvars' can be found here:  https://docs
 
 ## 3.1 Install and Configure Docker Swarm Cluster
 
-Create a playbook that will install and configure a Docker swarm cluster
+Create a playbook that will install and configure a Docker Swarm cluster
 
 Use the following inventory: [ansible_cluster_hosts](sources/ansible_cluster_hosts)
 And the following playbook: [configure-cluster.yml](sources/configure-cluster.yml)
@@ -391,7 +389,7 @@ Explain in a few lines why this play failed.
 
 ## 3.2 Benchmark Nginx 
 
-If your playbook is installed successfully you should be able to see the docker swarm visualizer at http://MATER-IP:5000/
+If your playbook is installed successfully you should be able to see the docker swarm visualizer at http://MASTER-IP:5000/
 
 Now we can benchmark Nginx. To do that, run the [benchmark-cluster.yml](sources/benchmark-cluster.yml) :
 ```
@@ -401,13 +399,13 @@ Fill in the tasks in the playbook provided:
  * Look in the end of the file and add your plays/tasks to repeat the process for 2, 4, and 8 instances 
  * Record the results for the Avg 'Req/Sec'
  * Create a histogram graph where in the x-axis you will have the number of instances i.e. 1,2,4,8 and in the y-axis the 'Req/Sec' for each run. 
- * Comment on the results do you get increased performance as you add more instances? If not explain why and how would you achieve more requests per second.
+ * Comment on the results: do you get increased performance as you add more instances? If not, explain why and how you would achieve more requests per second.
 
 
 
 
 ## 3.2 Ansible Play Development 
-In [playbook_example2](sources/playbook_example2.yml) if we want to run only the 'start nginx' play how would achieve that?
+In [playbook_example2](sources/playbook_example2.yml) if we want to run only the 'start nginx' play how would you achieve that?
 Provide the ansible-playbook command to do that. 
 
 
